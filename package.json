@@ -14,7 +14,7 @@
     "absolutize-css-resources"
   ],
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.11.0"
   },
   "author": "neuron-js",
   "license": "MIT",
@@ -24,5 +24,9 @@
   "devDependencies": {
     "mocha": "*",
     "chai": "*"
+  },
+  "dependencies": {
+    "array-unique": "^0.2.1",
+    "async": "^1.4.2"
   }
 }
