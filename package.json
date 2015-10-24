@@ -1,7 +1,7 @@
 {
   "name": "absolutize-css-resources",
   "version": "1.0.0",
-  "description": "absolutize-css-resources",
+  "description": "Convert css images and other resources into absolute paths",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec ./test/*.js"
@@ -11,7 +11,11 @@
     "url": "git://github.com/neuron-js/absolutize-css-resources.git"
   },
   "keywords": [
-    "absolutize-css-resources"
+    "absolutize-css-resources",
+    "absolute",
+    "css",
+    "images",
+    "url"
   ],
   "engines": {
     "node": ">=0.11.0"
@@ -27,6 +31,8 @@
   },
   "dependencies": {
     "array-unique": "^0.2.1",
-    "async": "^1.4.2"
+    "async": "^1.4.2",
+    "run-async": "^2.0.0",
+    "wrap-as-async": "^1.0.2"
   }
 }
