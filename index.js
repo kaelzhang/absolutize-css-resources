@@ -6,6 +6,7 @@ var node_url = require('url');
 var node_path = require('path');
 var async = require('async');
 var unique = require('array-unique');
+var wrap = require('wrap-as-async');
 
 //                     0           1      2
 var REGEX_CSS_IMAGE = /url\s*\(\s*(['"])?([^'"\)]+?)\1\s*\)/ig;
@@ -24,6 +25,8 @@ function absolutize (content, options, callback) {
     found.push(parse_matched(match));
   }
 
+  var resolve = wrap(options.resolve);
+
   async.map(found, function (matched, done) {
     var relative_path = matched.match;
 
@@ -32,7 +35,7 @@ function absolutize (content, options, callback) {
     }
 
     var parsed_relative = path_relative(relative_path, options);
-    options.resolve(parsed_relative, done);
+    resolve(parsed_relative, done);
 
   }, function (err, result) {
     if (err) {
