@@ -1,50 +1,74 @@
 'use strict';
 
 module.exports = absolutize;
-absolutize.resolve = resolve;
 
 var node_url = require('url');
 var node_path = require('path');
 var async = require('async');
 var unique = require('array-unique');
 
-//                     0     1      2
-var REGEX_CSS_IMAGE = /url\((['"])?([^'"]+)$1\)/ig;
+//                     0           1      2
+var REGEX_CSS_IMAGE = /url\s*\(\s*(['"])?([^'"\)]+?)\1\s*\)/ig;
 
 // @param {options}
 // - filename: `path`
-// - resolve: `function(path, callback)` the function to resolve relative filename to url
+// - resolve: `function(relative, callback)` the function to resolve relative filename to url
+//    - relative `path` the path relative to filebase
 // - filebase: `path`
-// - path: ``
 // - allow_absolute_url: `Boolean` default to false
 function absolutize (content, options, callback) {
   var found = [];
 
   var match;
   while(match = REGEX_CSS_IMAGE.exec(content)){
-    found.push(match[2]);  
+    found.push(parse_matched(match));
   }
 
-  found = unique(found);
+  async.map(found, function (matched, done) {
+    var relative_path = matched.match;
 
-  async.each(found, function (relative_path, done) {
-    if (isAbsolute(relative_path) && !options.allow_absolute_url) {
+    if (is_absolute(relative_path) && !options.allow_absolute_url) {
       return done(new Error('absolute css resources are not allowed: ' + relative_path));
     }
 
     var parsed_relative = path_relative(relative_path, options);
-    options.resolve(parsed_relative, function (err, resolved) {
-      if (err) {
-        return done(err);
-      }
+    options.resolve(parsed_relative, done);
 
-      content = content.replace(relative_path, resolved);
-      done();
-    });
+  }, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
 
-  }, function (err) {
-    callback(err, content);
+    var reader = 0;
+    var parsed = [];
+
+    found.forEach(function(matched, index){
+      parsed.push(content.slice(reader, matched.start));
+      parsed.push(result[index]);
+      reader = matched.end;
+    })
+
+    parsed.push(content.slice(reader));
+
+    callback(null, parsed.join(''));
   });
+}
+
+// 0      -> url( "a.png" )
+// 1      -> "
+// 2      -> a.png
+// index
+// input
+function parse_matched (match) {
+  var whole_match = match[0];
+  var url_match = match[2];
+  var start = match.index + whole_match.indexOf(url_match);
+
+  return {
+    start: start,
+    end: start + url_match.length,
+    match: url_match
+  };
 }
 
 
@@ -58,7 +82,7 @@ function is_absolute (path) {
 
 
 function is_path_absolute (path) {
-  return path.startsWith('/');
+  return path.indexOf('/') === 0;
 }
 
 
