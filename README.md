@@ -39,7 +39,7 @@ absolutize(file_content, {
 - allow_absolute_url `Boolean=true` whether allow absolute url of css images, such as `background: url(/a.png)` which is a bad practice.
 
 
-If we have a css file:
+### If we have a css file:
 
 ```css
 body {
@@ -49,7 +49,7 @@ body {
 
 Then the `parsed_content` will be:
 
-```
+```css
 body {
   background: url(http://yourdomain.com/to/img/a.png)
 }
