@@ -38,6 +38,23 @@ absolutize(file_content, {
   - `relative_path` the path of each css image or resource which is relative to `filebase` 
 - allow_absolute_url `Boolean=true` whether allow absolute url of css images, such as `background: url(/a.png)` which is a bad practice.
 
+
+If we have a css file:
+
+```css
+body {
+  background: url(img/a.png)
+}
+```
+
+Then the `parsed_content` will be:
+
+```
+body {
+  background: url(http://yourdomain.com/to/img/a.png)
+}
+```
+
 ## License
 
 MIT
