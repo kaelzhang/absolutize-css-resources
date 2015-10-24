@@ -1,6 +1,6 @@
 {
   "name": "absolutize-css-resources",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert css images and other resources into absolute paths",
   "main": "index.js",
   "scripts": {
