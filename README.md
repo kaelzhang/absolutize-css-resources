@@ -79,16 +79,17 @@ Sometimes, we need to invoke an asynchronous process to fetch the version info o
 
       var REGEX_EXTENSION = /\.[a-z0-9]$/i;
 
-      // Converts the relative path into an url
-      return require('url').resolve(
-        'http://mydomain.com/static/', 
-        // Inserts md5 string into the path
-        relative_path.replace(REGEX_EXTENSION, function(match){
-          return '-' + md5.slice(0, 7) + match;
-        })
-      );
+      // Inserts md5 string into the path
+      relative_path = relative_path.replace(REGEX_EXTENSION, function(match){
+        return '-' + md5.slice(0, 7) + match;
+      });
+
+      // Converts the relative path into an url,
       // The converted url might be something like:
       // -> http://mydomain.com/static/to/pic-9f9dd65.png
+      var resolved = require('url').resolve('http://mydomain.com/static/', relative_path);
+
+      done(null, resolved);
     });
   }
 }
