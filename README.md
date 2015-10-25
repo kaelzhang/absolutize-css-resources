@@ -72,7 +72,7 @@ Sometimes, we need to invoke an asynchronous process to fetch the version info o
     // Turns the method into an async method
     var done = this.async();
 
-    getMd5(relative_path, function(err, md5){
+    my_method_2_get_md5(relative_path, function(err, md5){
       if (err) {
         return done(err);
       }
