@@ -62,7 +62,7 @@ body {
 
 `options.resolve` can be a synchronous method or an asynchronous one by use the common [`this.async()`](https://www.npmjs.com/package/wrap-as-async) style.
 
-Sometimes, we need to invoke an asynchronous process to fetch the version info of a image resources, querying version from db or digesting md5 from the file content, for example.
+Sometimes, we need to invoke an asynchronous process to fetch the version info of a image, querying version from db or digesting md5 from the file content, for example.
 
 ```js
 
