@@ -6,7 +6,7 @@
 
 # absolutize-css-resources
 
-Convert css images and other resources into absolute paths
+Converts the links of all css images, fonts and other resources into absolute paths from a css file, and you are free to worry about improper replacement.
 
 ## Install
 
