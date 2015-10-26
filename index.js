@@ -5,7 +5,6 @@ module.exports = absolutize;
 var node_url = require('url');
 var node_path = require('path');
 var async = require('async');
-var unique = require('array-unique');
 var wrap = require('wrap-as-async');
 
 //                     0           1      2
