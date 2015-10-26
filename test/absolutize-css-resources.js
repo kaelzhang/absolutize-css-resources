@@ -6,7 +6,6 @@ var absolutize_css_resources = require('../');
 var node_path = require('path');
 var node_url = require('url');
 var fs = require('fs');
-var run = require('run-async');
 
 var root = node_path.join(__dirname, 'fixtures');
 var expected = node_path.join(__dirname, 'expected');
