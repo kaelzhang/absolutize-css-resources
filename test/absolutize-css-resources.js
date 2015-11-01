@@ -28,6 +28,8 @@ describe("absolutize", function(){
   it("should replace css background images", function(done){
     var a_css = node_path.join(root, 'a.css');
     var a_expected = node_path.join(expected, 'a.css');
+    var origins = [];
+    var relatives = [];
     absolutize_css_resources(fs.readFileSync(a_css).toString(), {
       filename: a_css,
       resolve: function (relative, callback) {
@@ -39,7 +41,26 @@ describe("absolutize", function(){
     }, function (err, content) {
       expect(err).to.equal(null);
       expect(content).to.equal(fs.readFileSync(a_expected).toString());
+      expect(origins).to.deep.equal([
+        'a.png',
+        'img/a.png',
+        'img/a.png',
+        'img/b.png',
+        '/b.png'
+      ]);
+
+      expect(relatives).to.deep.equal([
+        'a.png',
+        'img/a.png',
+        'img/a.png',
+        'img/b.png',
+        '/b.png'
+      ]);
+
       done()
+    }, function(origin, relative){
+      origins.push(origin);
+      relatives.push(relative);
     });
   });
 });

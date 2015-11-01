@@ -16,7 +16,7 @@ var REGEX_CSS_IMAGE = /url\s*\(\s*(['"])?([^'"\)]+?)\1\s*\)/ig;
 //    - relative `path` the path relative to filebase
 // - filebase: `path`
 // - allow_absolute_url: `Boolean` default to false
-function absolutize (content, options, callback) {
+function absolutize (content, options, callback, found_callback) {
   var found = [];
 
   var match;
@@ -28,12 +28,17 @@ function absolutize (content, options, callback) {
 
   async.map(found, function (matched, done) {
     var relative_path = matched.match;
+    var is_abs = is_absolute(relative_path);
 
-    if (is_absolute(relative_path) && !options.allow_absolute_url) {
+    if (is_abs && !options.allow_absolute_url) {
       return done(new Error('absolute css resources are not allowed: ' + relative_path));
     }
 
-    var parsed_relative = path_relative(relative_path, options);
+    var parsed_relative = is_abs
+      ? relative_path
+      : path_relative(relative_path, options);
+    found_callback && found_callback(relative_path, parsed_relative);
+
     resolve(parsed_relative, done);
 
   }, function (err, result) {
