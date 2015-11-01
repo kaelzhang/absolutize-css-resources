@@ -12,7 +12,7 @@ var expected = node_path.join(__dirname, 'expected');
 
 describe("absolutize", function(){
   it("options.allow_absolute_url -> false", function(done){
-    var a_css = node_path.join(root, 'a.css');
+    var a_css = node_path.join(root, 'path/a.css');
     absolutize_css_resources(fs.readFileSync(a_css).toString(), {
       filename: a_css,
       resolve: function (relative) {
@@ -26,7 +26,7 @@ describe("absolutize", function(){
   });
 
   it("should replace css background images", function(done){
-    var a_css = node_path.join(root, 'a.css');
+    var a_css = node_path.join(root, 'path/a.css');
     var a_expected = node_path.join(expected, 'a.css');
     var origins = [];
     var relatives = [];
@@ -50,10 +50,10 @@ describe("absolutize", function(){
       ]);
 
       expect(relatives).to.deep.equal([
-        'a.png',
-        'img/a.png',
-        'img/a.png',
-        'img/b.png',
+        'path/a.png',
+        'path/img/a.png',
+        'path/img/a.png',
+        'path/img/b.png',
         '/b.png'
       ]);
 

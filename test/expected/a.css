@@ -1,7 +1,7 @@
 body{
-  background: url(http://domain.com/path/a.png);
-  background: url(http://domain.com/path/img/a.png);
-  background: url('http://domain.com/path/img/a.png');
-  /* background: url('http://domain.com/path/img/b.png'); */
+  background: url(http://domain.com/path/path/a.png);
+  background: url(http://domain.com/path/path/img/a.png);
+  background: url('http://domain.com/path/path/img/a.png');
+  /* background: url('http://domain.com/path/path/img/b.png'); */
   background: url("http://domain.com/b.png");
 }

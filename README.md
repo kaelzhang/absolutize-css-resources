@@ -47,7 +47,7 @@ body {
 }
 ```
 
-### absolutize(file_content, options, callback)
+### absolutize(file_content, options, callback [, callback_on_found])
 
 - **file_content** `String` the content of the css file
 - **options** `Object`
@@ -57,6 +57,9 @@ body {
     - relative_path the path of each css image or resource which is relative to `filebase` 
   - **allow_absolute_url** `Boolean=true` whether allow absolute url of css images, such as `background: url(/a.png)` which is a bad practice.
 - **callback** `function()` the error(if exists) and the parsed content will pass to the callback function.
+- **callback_on_found** `function(path, relative_path)=` called if a css resource is found. Optional.
+  - **path** the original pathname of the resource
+  - **relative_path** the pathname relative to the `filebase`
 
 #### options.resolve(relative_path)
 
