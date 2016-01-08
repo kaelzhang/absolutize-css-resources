@@ -20,6 +20,8 @@ describe("absolutize", function(){
       },
       filebase: root
     }, function (err, content) {
+      expect(/-{26}\^/.test(err.message)).to.equal(true)
+      expect(!!~err.message.indexOf('column: 20')).to.equal(true)
       expect(err).not.to.equal(null);
       done()
     });

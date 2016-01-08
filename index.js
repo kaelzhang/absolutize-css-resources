@@ -7,6 +7,7 @@ var node_path = require('path')
 var async = require('async')
 var wrap = require('wrap-as-async')
 var chalk = require('chalk')
+var code = require('print-code')
 
 //                     0           1      2
 var REGEX_CSS_IMAGE = /url\s*\(\s*(['"])?([^'"\)]+?)\1\s*\)|\n/ig
@@ -20,7 +21,7 @@ var REGEX_CSS_IMAGE = /url\s*\(\s*(['"])?([^'"\)]+?)\1\s*\)|\n/ig
 function absolutize (content, options, callback, found_callback) {
   content = String(content)
 
-  var line_count = 0
+  var line_count = 1
   var line = {
     line: line_count,
     index: 0
@@ -89,95 +90,18 @@ function absolutize (content, options, callback, found_callback) {
 }
 
 
-var MAX_COLUMNS = 79
+var MAX_COLUMNS = 78
 
 function format_exception (err, content, matched) {
-  var lines = content.split('\n')
-  var line_start = Math.max(0, matched.line - 3)
-  var line_end = Math.min(lines.length, matched.line + 3)
+  var start = Math.max(0, matched.line - 3)
+  var end = matched.line + 3
 
-  var message = 
-    lines
-    .slice(line_start, line_end)
-    .map(function (line, index) {
-      var no = index + line_start
-      var no_length = (no + '').length
-      var mark = ''
-      var column = matched.column
-      var start = 0
-      var length = line.length
-      var end = length
-
-      if (length > MAX_COLUMNS) {
-        // If is the current line, 
-        if (matched.line === no) {
-          // at least, we should display `url(url)`
-          //                              ----
-          start = Math.max(0, matched.column - 4)
-        } else {
-          start = 0
-        }
-
-        end = Math.min(
-          line.length,
-          Math.max(
-            matched.column + matched.match.length + 4,
-            length
-          )
-        )
-      }
-
-      // Handle ellipsis
-      end = Math.min(
-        end,
-        // ... url
-        MAX_COLUMNS + start - (
-            start === 0
-              ? 0
-              // ...(whitespace)
-              : 4
-          ) - (
-            end === length
-              ? 0
-              : 4
-          )
-      )
-
-      var caret = start === 0
-        ? column
-        // '... url('
-        : 8
-
-      var line_string = (
-          start === 0
-           ? ''
-           : '... '
-        ) 
-      + line.slice(start, end)
-      + (
-          end === length
-            ? ''
-            : ' ...'
-        )
-
-      if (matched.line === no) {
-        mark = '\n'
-          // -------^
-          // 5: line no
-          // 1: |
-          // 1: whitespace
-          + Array(7 + 1 + caret).join('-') + '^  '
-          + 'column: ' + column
-      }
-
-      // spaces
-      return Array(5 + 1 - no_length).join(' ')
-        + no
-        + '| '
-        + line_string
-        + mark
-    })
-    .join('\n')
+  var message = code(content)
+    .slice(start, end)
+    .max_columns(MAX_COLUMNS)
+    .highlight(matched.line)
+    .arrow_mark(matched.line, matched.column)
+    .get()
 
   err.message = err.message + '\n\n' + message + '\n'
   return err
