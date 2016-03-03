@@ -4,4 +4,5 @@ body{
   background: url('http://domain.com/path/path/img/a.png');
   /* background: url('http://domain.com/path/path/img/b.png'); */
   background: url("http://domain.com/b.png");
+  background: url("data:abc");
 }

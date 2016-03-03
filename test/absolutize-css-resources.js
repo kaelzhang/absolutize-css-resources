@@ -48,7 +48,8 @@ describe("absolutize", function(){
         'img/a.png',
         'img/a.png',
         'img/b.png',
-        '/b.png'
+        '/b.png',
+        'data:abc'
       ]);
 
       expect(relatives).to.deep.equal([
@@ -56,7 +57,8 @@ describe("absolutize", function(){
         'path/img/a.png',
         'path/img/a.png',
         'path/img/b.png',
-        '/b.png'
+        '/b.png',
+        'data:abc'
       ]);
 
       done()

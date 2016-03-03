@@ -48,7 +48,8 @@ function absolutize (content, options, callback, found_callback) {
 
   async.map(found, function (matched, done) {
     var relative_path = matched.match
-    var is_abs = is_absolute(relative_path)
+    var is_base64 = relative_path.indexOf('data:') === 0
+    var is_abs = !is_base64 && is_absolute(relative_path)
 
     if (is_abs && !options.allow_absolute_url) {
       var err = new Error(
@@ -62,10 +63,17 @@ function absolutize (content, options, callback, found_callback) {
       return done(err)
     }
 
-    var parsed_relative = is_abs
+    var parsed_relative = is_base64
       ? relative_path
-      : path_relative(relative_path, options)
+      : is_abs
+        ? relative_path
+        : path_relative(relative_path, options)
+
     found_callback && found_callback(relative_path, parsed_relative)
+
+    if (is_base64) {
+      return done(null, parsed_relative)
+    }
 
     resolve(parsed_relative, done)
 
