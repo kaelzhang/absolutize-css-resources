@@ -51,6 +51,15 @@ function absolutize (content, options, callback, found_callback) {
     var is_base64 = relative_path.indexOf('data:') === 0
     var is_abs = !is_base64 && is_absolute(relative_path)
 
+    function cb (err, path) {
+      if (err) {
+        err = format_exception(err, content, matched)
+        return done(err)
+      }
+
+      done(null, path)
+    }
+
     if (is_abs && !options.allow_absolute_url) {
       var err = new Error(
         'absolute css resources "'
@@ -59,8 +68,7 @@ function absolutize (content, options, callback, found_callback) {
         + options.filename + '"'
       )
 
-      err = format_exception(err, content, matched)
-      return done(err)
+      return cb(err)
     }
 
     var parsed_relative = is_base64
@@ -75,7 +83,7 @@ function absolutize (content, options, callback, found_callback) {
       return done(null, parsed_relative)
     }
 
-    resolve(parsed_relative, done)
+    resolve(parsed_relative, cb)
 
   }, function (err, result) {
     if (err) {
